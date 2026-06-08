@@ -8,6 +8,16 @@ html.fp-enabled body {
 	height: 100%;
 }
 
+html.fp-enabled.fp-responsive,
+html.fp-enabled.fp-responsive body {
+	overflow: visible;
+	height: auto;
+}
+
+html.fp-enabled.fp-responsive #container {
+	height: auto !important;
+}
+
 #fp-nav {left: 3rem; margin-top: 0 !important; transform: translatey(-50%); z-index: 5; }
 #fp-nav > ul {display: flex; flex-direction: column; row-gap: 1.6rem; }
 #fp-nav > ul > li {width: auto; height: auto; margin: 0; }
@@ -44,7 +54,7 @@ html.fp-enabled body {
     100% {margin-top: -.5rem; }
 }
 .section:not(.section-footer) {overflow: hidden; }
-@media (min-width: 1281px), (min-height: 901px) {
+@media (min-width: 1281px) and (min-height: 901px) {
 
     .section {height: 100vh !important; }
 }
