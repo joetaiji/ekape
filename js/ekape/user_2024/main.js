@@ -11,16 +11,13 @@ const fullpageContainer = () => {
 		const $fullpageSections = () => $("#container").children(".section");
 
 		const isFullpageResponsive = () =>
-			FULLPAGE_RESPONSIVE_MQ.matches ||
-			$("html").hasClass("fp-responsive") ||
-			$("body").hasClass("fp-responsive") ||
-			$("#container").hasClass("fp-responsive");
+			FULLPAGE_RESPONSIVE_MQ.matches || $("body").hasClass("fp-responsive");
 
 		const isFullpageActive = () =>
+			!isFullpageResponsive() &&
 			typeof $.fn.fullpage !== "undefined" &&
 			typeof $.fn.fullpage.moveTo === "function" &&
-			($("html").hasClass("fp-enabled") || $("body").hasClass("fp-enabled")) &&
-			!isFullpageResponsive();
+			$("html").hasClass("fp-enabled");
 
 		const getSectionIndex = (section) => $fullpageSections().index(section);
 
@@ -129,50 +126,64 @@ const fullpageContainer = () => {
 			window.addEventListener("scroll", handleFullpageScrollGuard, { passive: true });
 		};
 
-		const syncFullpageFocusSyncMode = () => {
-			if (isFullpageActive()) {
-				bindFullpageFocusSync();
+		const setupFpNav = () => {
+			for (let i = 0; i <= $("#fp-nav li").length; ++i) {
+				$("#fp-nav li").eq(i).find("a").append(`<p><b>${bullet[i]}</b><i class="sr-only">섹션으로 이동</i></p>`);
+				$("#fp-nav li").eq(i).find(">.fp-tooltip, a>span").remove();
+			}
+		};
+
+		const destroyFullpage = () => {
+			unbindFullpageFocusSync();
+
+			if (!$("html").hasClass("fp-enabled")) return;
+
+			if (typeof $.fn.fullpage.destroy === "function") {
+				$.fn.fullpage.destroy("all");
+			}
+		};
+
+		const initFullpage = () => {
+			if (isFullpageResponsive() || $("html").hasClass("fp-enabled")) return;
+
+			$("#container").fullpage({
+				anchors: FULLPAGE_ANCHORS,
+				navigationTooltips: bullet,
+				navigation: true,
+				navigationPosition: "none",
+				showActiveTooltip: true,
+				menu: "#menu",
+				responsiveWidth: 1280,
+				responsiveHeight: 900,
+				scrollingSpeed: FULLPAGE_SCROLLING_SPEED,
+				slidesNavigation: true,
+				keyboardScrolling: true,
+				normalScrollElements: ".section-press-list ul",
+				afterRender: setupFpNav,
+				afterLoad: function () {
+					resetPageScroll();
+					enableFullpageScrolling();
+				},
+			});
+
+			bindFullpageFocusSync();
+		};
+
+		const handleFullpageMode = () => {
+			if (isFullpageResponsive()) {
+				destroyFullpage();
 				return;
 			}
 
-			unbindFullpageFocusSync();
+			initFullpage();
 		};
 
-		$("#container").fullpage({
-			anchors: FULLPAGE_ANCHORS,
-			navigationTooltips: bullet,
-			navigation: true,
-			navigationPosition: "none",
-			showActiveTooltip: true,
-			menu: "#menu",
-			responsiveWidth: 1280,
-			responsiveHeight: 900,
-			scrollingSpeed: FULLPAGE_SCROLLING_SPEED,
-			slidesNavigation: true,
-			keyboardScrolling: true,
-			normalScrollElements: ".section-press-list ul",
-			onResponsive: syncFullpageFocusSyncMode,
-			afterResponsive: syncFullpageFocusSyncMode,
-			afterLoad: function () {
-				if (!isFullpageResponsive()) {
-					resetPageScroll();
-					enableFullpageScrolling();
-				}
-			},
-		});
-
-		syncFullpageFocusSyncMode();
+		handleFullpageMode();
 
 		if (typeof FULLPAGE_RESPONSIVE_MQ.addEventListener === "function") {
-			FULLPAGE_RESPONSIVE_MQ.addEventListener("change", syncFullpageFocusSyncMode);
+			FULLPAGE_RESPONSIVE_MQ.addEventListener("change", handleFullpageMode);
 		} else if (typeof FULLPAGE_RESPONSIVE_MQ.addListener === "function") {
-			FULLPAGE_RESPONSIVE_MQ.addListener(syncFullpageFocusSyncMode);
-		}
-
-
-		for(let i = 0; i <= $('#fp-nav li').length; ++i) {
-			$('#fp-nav li').eq(i).find('a').append(`<p><b>${bullet[i]}</b><i class="sr-only">섹션으로 이동</i></p>`)
-			$("#fp-nav li").eq(i).find(">.fp-tooltip, a>span").remove();
+			FULLPAGE_RESPONSIVE_MQ.addListener(handleFullpageMode);
 		}
 	}
 }
@@ -198,10 +209,13 @@ const mvisual = () => {
         const $slideStop = $util.querySelector('button[data-slide-action="auto-stop"]');
 
         let $slideLength = $slider.querySelectorAll(".swiper-slide").length;
+		const isMobileMainViewport = () =>
+			window.matchMedia("(max-width: 1280px), (max-height: 900px)").matches;
 
         const $slide = new Swiper($slider, {
             slidesPerView: "auto",
             speed:1000,
+			allowTouchMove: !isMobileMainViewport(),
             autoplay : {
             	delay: 7500,
 				disableOnInteraction: false,

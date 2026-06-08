@@ -8,14 +8,32 @@ html.fp-enabled body {
 	height: 100%;
 }
 
-html.fp-enabled.fp-responsive,
-html.fp-enabled.fp-responsive body {
-	overflow: visible;
-	height: auto;
+/* fullPage 2.9.7: fp-responsive는 body에 적용됨 */
+body.fp-responsive,
+html.fp-enabled body.fp-responsive {
+	overflow: visible !important;
+	height: auto !important;
 }
 
-html.fp-enabled.fp-responsive #container {
-	height: auto !important;
+@media (max-width: 1280px), (max-height: 900px) {
+	html.fp-enabled,
+	html.fp-enabled body {
+		overflow: visible !important;
+		height: auto !important;
+	}
+
+	html.fp-enabled #container {
+		height: auto !important;
+		position: relative !important;
+		transform: none !important;
+		-ms-touch-action: auto !important;
+		touch-action: auto !important;
+	}
+
+	html.fp-enabled .section,
+	html.fp-enabled .fp-tableCell {
+		height: auto !important;
+	}
 }
 
 #fp-nav {left: 3rem; margin-top: 0 !important; transform: translatey(-50%); z-index: 5; }
