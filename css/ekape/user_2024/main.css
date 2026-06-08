@@ -121,10 +121,12 @@ html.fp-enabled body.fp-responsive {
 .section-more > span {font-weight: 700; }
 .section-more > i {flex-shrink: 0; }
 .section-more > i[class*="-s-"] {transform: unset; }
-.section-visual {background-color: #fafafa; }
-.section-visual-bg {position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+.section-visual {position: relative; isolation: isolate; background-color: #fafafa; }
+.section-visual-bg {position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; overflow: hidden; }
+.section-visual-bg .swiper-wrapper,
+.section-visual-bg .swiper-slide {height: 100%; }
 .section-visual-bg img {width: 100%; height: 100%; object-fit: cover; object-position: center; }
-.section-visual-desc {display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; color: #fff; }
+.section-visual-desc {display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; position: relative; z-index: 1; color: #fff; }
 .section-visual-desc-copy {padding-right: 5rem; width: calc(100% - 13rem); }
 .section-visual-desc-copy > strong {font-size: 2.4rem; font-weight: 500; line-height: 1.4; }
 .section-visual-desc-copy > p {margin-top: 1.5rem; font-size: 6rem; font-weight: 700; line-height: 1.3; }
@@ -134,7 +136,7 @@ html.fp-enabled body.fp-responsive {
 .section-visual-desc .slide-util {display: inline-flex; gap: 1.6rem; margin-top: 4.5rem; padding: .8rem 2.4rem; background-color: rgba(0, 0, 0, 0.2); border-radius: 6rem; }
 .section-visual-desc .slide-util-ctrl {display: flex; gap: .8rem; font-size: 2rem; }
 .section-visual-desc .slide-util-ctrl > button {line-height: 1; }
-.section-visual-menu {position: absolute; bottom: 0; left: 0; width: 100%; background-color: rgba(0, 0, 0, 0.16); backdrop-filter: blur(20px); }
+.section-visual-menu {position: absolute; bottom: 0; left: 0; z-index: 1; width: 100%; background-color: rgba(0, 0, 0, 0.16); backdrop-filter: blur(20px); }
 .section-visual-menu > .layout {padding: 0; }
 .section-visual-menu-list {display: flex; }
 .section-visual-menu-list > li {flex: 1; position: relative; }
