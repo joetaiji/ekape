@@ -1,0 +1,1949 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>
+        영상 &lt;
+        홍보자료 &lt;
+        누리홍보
+        - 축산물품질평가원
+    </title>
+    <meta charset="utf-8">
+    <meta content="IE=edge, chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    <meta name="description" content="축산물품질평가원 홈페이지">
+    <meta name="google-site-verification" content="zVa1WabtxGEsxfgQNQ-D-SKLf_bSwicMx_xulvtsmWM" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <!-- jquery + plugin -->
+    <script src="/js/ekape/user_2024/jquery-3.5.1.min.js"></script>
+    <script src="/js/ekape/user_2024/jquery-ui.min.js"></script>
+    <script src="/js/ekape/user_2024/fullPage/jquery.fullPage.js"></script>
+    <script src="/js/ekape/user_2024/swiper/swiper.min.js"></script>
+    <script src="/js/ekape/user_2024/gsap/gsap.min.js"></script>
+    <script src="/js/ekape/user_2024/gsap/ScrollToPlugin.min.js"></script>
+    <script src="/js/ekape/user_2024/gsap/ScrollTrigger.min.js"></script>
+    <!--custom-->
+    <script type="text/javascript" src="/js/ekape/hr/hr_common.js"></script>
+    <script type="text/javascript" src="/js/ekape/user/common.js"></script>
+    <script src="/js/ekape/user_2024/common.js"></script>
+    <script src="/js/ekape/user_2024/sub.js"></script>
+    <!-- css -->
+    <link rel="stylesheet" href="/js/ekape/user_2024/swiper/swiper.min.css" />
+    <link rel="stylesheet" href="/css/ekape/user_2024/fonts.css" />
+    <link rel="stylesheet" href="/css/ekape/user_2024/general.css" />
+    <link rel="stylesheet" href="/css/ekape/user_2024/layout.css" />
+    <link rel="stylesheet" href="/css/ekape/user_2024/sub.css" />
+    <link rel="stylesheet" href="/css/ekape/user_2024/board.css" />
+    <script type="text/javascript" src="/plugin/moment/moment.js"></script>
+    <script type="text/javascript" src="/plugin/moment/moment_locale_kr.js"></script>
+    <script type="text/javascript" src="/js/ekape/user/clipboard.min.js"></script>
+    <script type="text/javascript" src="/js/ekape/user/slick.js"></script>
+    <script type="text/javascript" src="/plugin/printjs/print.min.js"></script>
+    <script>
+        var scriptPath = "";
+        if (window.location.hostname === 'localhost') {
+            document.title = '[사용자] ' + document.title;
+        }
+    </script>
+    <style>
+        .menu {
+            cursor: pointer;
+            display: inline-block;
+            position: relative;
+            font-size: 1.6rem;
+        }
+        .shortcut {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 8px;
+            z-index: 1000;
+            width: 120%;
+        }
+        .shortcut a {
+            display: block;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            padding-left: 5px;
+            padding-right: 5px;
+            text-decoration: none;
+            color: black;
+        }
+        .shortcut a:hover {
+            font-weight: bolder;
+        }
+    </style>
+    <!-- main -->
+    <script>
+        $(function () {
+        });
+        function fn_shortcut_show1(menuId) {
+            var maxLength = "";
+            var length = 0;
+            var html1 = "";
+            $('#shortcutMenu1').empty();
+            $.ajax({
+                async: true,
+                type: "post",
+                contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                url: "/common/getShortcut.do",
+                dataType: "json",
+                data: {
+                    MENU_ID: menuId
+                    , SITE_CODE: 'user'
+                },
+                success: function (data) {
+                    for (var i = 0; i < data.shortList.length; i++) {
+                        html1 += '<a href="#" onclick=\"return fn_shortcut_go(\''
+                            + data.shortList[i].menuId + '\');">'
+                            + '· '
+                            + data.shortList[i].menuTitle
+                            + '</a>';
+                        length = getByteSizeUTF8(data.shortList[i].menuTitle);
+                        if (length > maxLength) {
+                            maxLength = length
+                        }
+                    }
+                    if (maxLength < 13) {
+                        var fitWidth = "100px";
+                    } else {
+                        var fitWidth = (maxLength * 5 + 30) + "px";
+                    }
+                    document.getElementById("shortcutMenu1").style.setProperty("width", fitWidth);
+                    $('#shortcutMenu1').append(html1).show();
+                    $('#shortcutMenu2').hide();
+                    $('#shortcutMenu3').hide();
+                    $('#shortcutMenu4').hide();
+                    $("#menuBtn1>a").attr("title", "1depth 메뉴 접기");
+                    $("#menuBtn2>a").attr("title", "2depth 메뉴 펼치기");
+                    $("#menuBtn3>a").attr("title", "3depth 메뉴 펼치기");
+                    $("#menuBtn4>a").attr("title", "4depth 메뉴 펼치기");
+                },
+                error: function (requset, status, error) {
+                    alert("시스템 오류 입니다. 시스템관리자에게 문의하시기 바립니다.");
+                }
+            });
+            $(document).on('click', function () {
+                fn_hide_shortcut();
+            });
+        }
+        function fn_shortcut_show2(menuId) {
+            var maxLength = "";
+            var length = 0;
+            var html2 = "";
+            $('#shortcutMenu2').empty();
+            $.ajax({
+                async: true,
+                type: "post",
+                contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                url: "/common/getShortcut.do",
+                dataType: "json",
+                data: {
+                    MENU_ID: menuId
+                    , SITE_CODE: 'user'
+                },
+                success: function (data) {
+                    for (var i = 0; i < data.shortList.length; i++) {
+                        html2 += '<a href="#" onclick=\"return fn_shortcut_go(\''
+                            + data.shortList[i].menuId + '\');">'
+                            + '· '
+                            + data.shortList[i].menuTitle
+                            + '</a>';
+                        length = getByteSizeUTF8(data.shortList[i].menuTitle);
+                        if (length > maxLength) {
+                            maxLength = length
+                        }
+                    }
+                    if (maxLength < 13) {
+                        var fitWidth = "100px";
+                    } else {
+                        var fitWidth = (maxLength * 5 + 30) + "px";
+                    }
+                    document.getElementById("shortcutMenu2").style.setProperty("width", fitWidth);
+                    $('#shortcutMenu2').append(html2).show();
+                    $('#shortcutMenu1').hide();
+                    $('#shortcutMenu3').hide();
+                    $('#shortcutMenu4').hide();
+                    $("#menuBtn2>a").attr("title", "2depth 메뉴 접기");
+                    $("#menuBtn1>a").attr("title", "1depth 메뉴 펼치기");
+                    $("#menuBtn3>a").attr("title", "3depth 메뉴 펼치기");
+                    $("#menuBtn4>a").attr("title", "4depth 메뉴 펼치기");
+                },
+                error: function (requset, status, error) {
+                    alert("시스템 오류 입니다. 시스템관리자에게 문의하시기 바립니다.");
+                }
+            });
+            $(document).on('click', function () {
+                fn_hide_shortcut();
+            });
+        }
+        function fn_shortcut_show3(menuId) {
+            var maxLength = "";
+            var length = 0;
+            var html3 = "";
+            $('#shortcutMenu3').empty();
+            $.ajax({
+                async: true,
+                type: "post",
+                contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                url: "/common/getShortcut.do",
+                dataType: "json",
+                data: {
+                    MENU_ID: menuId
+                    , SITE_CODE: 'user'
+                },
+                success: function (data) {
+                    for (var i = 0; i < data.shortList.length; i++) {
+                        html3 += '<a href="#" onclick=\"return fn_shortcut_go(\''
+                            + data.shortList[i].menuId + '\');">'
+                            + '· '
+                            + data.shortList[i].menuTitle
+                            + '</a>';
+                        length = getByteSizeUTF8(data.shortList[i].menuTitle);
+                        if (length > maxLength) {
+                            maxLength = length
+                        }
+                    }
+                    if (maxLength < 13) {
+                        var fitWidth = "100px";
+                    } else {
+                        var fitWidth = (maxLength * 5 + 30) + "px";
+                    }
+                    if (menuId == 'menu140656' || menuId == 'menu185098' || menuId == 'menu140460' || menuId == 'menu197315' || menuId == 'menu127871') {
+                        var fitWidth = (maxLength * 5 + 60) + "px";
+                    }
+                    document.getElementById("shortcutMenu3").style.setProperty("width", fitWidth);
+                    $('#shortcutMenu3').append(html3).show();
+                    $('#shortcutMenu1').hide();
+                    $('#shortcutMenu2').hide();
+                    $('#shortcutMenu4').hide();
+                    $("#menuBtn3>a").attr("title", "3depth 메뉴 접기");
+                    $("#menuBtn1>a").attr("title", "1depth 메뉴 펼치기");
+                    $("#menuBtn2>a").attr("title", "2depth 메뉴 펼치기");
+                    $("#menuBtn4>a").attr("title", "4depth 메뉴 펼치기");
+                },
+                error: function (requset, status, error) {
+                    alert("시스템 오류 입니다. 시스템관리자에게 문의하시기 바립니다.");
+                }
+            });
+            $(document).on('click', function () {
+                fn_hide_shortcut();
+            });
+        }
+        function fn_shortcut_show4(menuId) {
+            var maxLength = "";
+            var length = 0;
+            var html4 = "";
+            $('#shortcutMenu4').empty();
+            $.ajax({
+                async: true,
+                type: "post",
+                contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                url: "/common/getShortcut.do",
+                dataType: "json",
+                data: {
+                    MENU_ID: menuId
+                    , SITE_CODE: 'user'
+                },
+                success: function (data) {
+                    for (var i = 0; i < data.shortList.length; i++) {
+                        console.log(data.shortList[i].menuId);
+                        html4 += '<a href="#" onclick=\"return fn_shortcut_go(\''
+                            + data.shortList[i].menuId + '\');">'
+                            + '· ';
+                        html4 += data.shortList[i].menuTitle;
+                        html4 += '</a>';
+                        length = getByteSizeUTF8(data.shortList[i].menuTitle);
+                        if (length > maxLength) {
+                            maxLength = length
+                        }
+                    }
+                    if (maxLength < 13) {
+                        var fitWidth = "100px";
+                    } else {
+                        var fitWidth = (maxLength * 5 + 30) + "px";
+                    }
+                    /*
+                        영어 섞여서 사이즈 수동으로 맞춰봄
+                    */
+                    if (menuId == 'menu139815' || menuId == 'menu181476' || menuId == 'menu156527' || menuId == 'menu151670') {
+                        var fitWidth = (maxLength * 5 + 40) + "px";
+                    }
+                    document.getElementById("shortcutMenu4").style.setProperty("width", fitWidth);
+                    $('#shortcutMenu1').hide();
+                    $('#shortcutMenu2').hide();
+                    $('#shortcutMenu3').hide();
+                    $('#shortcutMenu4').append(html4).show();
+                    $("#menuBtn4>a").attr("title", "4depth 메뉴 접기");
+                    $("#menuBtn1>a").attr("title", "1depth 메뉴 펼치기");
+                    $("#menuBtn2>a").attr("title", "2depth 메뉴 펼치기");
+                    $("#menuBtn3>a").attr("title", "3depth 메뉴 펼치기");
+                },
+                error: function (requset, status, error) {
+                    alert("시스템 오류 입니다. 시스템관리자에게 문의하시기 바립니다.");
+                }
+            });
+            $(document).on('click', function () {
+                fn_hide_shortcut();
+            });
+        }
+        function fn_hide_shortcut() {
+            $('#shortcutMenu1').hide();
+            $('#shortcutMenu2').hide();
+            $('#shortcutMenu3').hide();
+            $('#shortcutMenu4').hide();
+        }
+        function fn_shortcut_go(menuId) {
+            $.ajax({
+                async: true,
+                type: "post",
+                contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                url: "/common/getMenuId.do",
+                dataType: "json",
+                data: {
+                    MENU_ID: menuId
+                },
+                success: function (data) {
+                    console.log(data);
+                    window.location.href = data.map.menuUrl + "?menuId=" + data.map.menuId;
+                },
+                error: function (requset, status, error) {
+                    alert("시스템 오류 입니다. 시스템관리자에게 문의하시기 바립니다.");
+                }
+            });
+        }
+        function getByteSizeUTF8(str) {
+            return new TextEncoder().encode(str).length;
+        }
+    </script>
+</head>
+<body>
+    <form name="menuForm" method="post">
+        <input type="hidden" name="menuId" value="" />
+    </form>
+    <div id="skip_nav">
+        <a href="#gnb">주메뉴 바로가기</a>
+        <a href="#content-wrap">본문 바로가기</a>
+    </div>
+    <div class="overlay"></div>
+    <script type="text/javascript" src="/js/ekape/hr/hr_board.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#gnb > ul > li >a').on("click", function () {
+                if ($(this).parent().find('.depth02 ul li:first-child .depth03').size() < 1) {
+                    var urlTemp = $(this).parent().find('.depth02 ul li:first-child a').attr('href');
+                    var url = urlTemp.substring(0, urlTemp.indexOf('?'));
+                    if (urlTemp.indexOf('&') != -1) {
+                        var menuId = urlTemp.substring(urlTemp.indexOf('menuId=') + 7, urlTemp.indexOf('&'));
+                        var boardInfoNo = urlTemp.substring(urlTemp.indexOf('boardInfoNo=') + 12);
+                    } else {
+                        var menuId = urlTemp.substring(urlTemp.indexOf('menuId=') + 7);
+                    }
+                    fn_menu_go(url, menuId, boardInfoNo);
+                } else {
+                    var urlTemp = $(this).parent().find('.depth03 ul li:first-child a').attr('href');
+                    var url = urlTemp.substring(0, urlTemp.indexOf('?'));
+                    if (urlTemp.indexOf('&') != -1) {
+                        var menuId = urlTemp.substring(urlTemp.indexOf('menuId=') + 7, urlTemp.indexOf('&'));
+                        var boardInfoNo = urlTemp.substring(urlTemp.indexOf('boardInfoNo=') + 12);
+                    } else {
+                        var menuId = urlTemp.substring(urlTemp.indexOf('menuId=') + 7);
+                    }
+                    fn_menu_go(url, menuId, boardInfoNo);
+                }
+            });
+            $("#searchIntegForm").on('keydown', function (e) {
+                if (e.key == 'Enter') {
+                    goMainSearchList()
+                }
+            });
+        });
+        function fn_menu_go(menu_url, menu_id, menu_target) {
+            $("input[name=menuId]").val(menu_id);
+            //     $("input[name=boardInfoNo]").val(menu_target);
+            $("#menuForm").prop("action", menu_url);
+            $("#menuForm").submit();
+            return false;
+        }
+        /* 전체 게시물 검색 */
+        function goMainSearchList() {
+            document.searchIntegForm.searchKeywordMain.value = XSSCheck(document.searchIntegForm.searchKeywordMain.value, 0);
+            document.searchIntegForm.searchConditionMain.value = 'SUBJECT';
+            document.searchIntegForm.searchTypeMain.value = 'all';
+            document.searchIntegForm.largeMenuIdMain.value = 'all';
+            document.searchIntegForm.pageIndexMain.value = 1;
+            document.searchIntegForm.maincheck.value = 'Y';
+            document.searchIntegForm.action = scriptPath + "/integrateSearch.do";
+            document.searchIntegForm.submit();
+        }
+    </script>
+    <form id="menuForm" name="menuForm" method="get" action="">
+        <input type="hidden" name="menuId" value="" />
+        <!--     <input type="hidden" name="boardInfoNo" value=""/> -->
+        <input type="hidden" name="nextUrl" value="" />
+    </form>
+    <header id="header" class="header">
+        <div class="header-top layout">
+            <div class="header-top-menu">
+                <!-- 메인페이지 -->
+                <a href="/" class="header-top-menu-link" data-link="main">
+                    <span>대표 누리집</span>
+                </a>
+                <!-- 인트로페이지 연결 -->
+                <a href="#quick-service" class="header-top-menu-link" data-link="intro">
+                    <span>주요 서비스 한눈에 보기</span>
+                </a>
+                <div id="quick-service" class="modal-popup">
+                    <div class="modal-popup-container">
+                        <div class="modal-popup-header">
+                            <strong>주요 서비스 한눈에 보기</strong>
+                            <button type="button" class="modal-popup-close">
+                                <i class="ri-close-line"></i>
+                                <span class="sr-only">팝업창 닫기</span>
+                            </button>
+                        </div>
+                        <div class="modal-popup-content">
+                            <ul class="quick-service-menu">
+                                <li>
+                                    <strong>
+                                        <span>생산정보</span>
+                                        <i class="quick-service-menu-icon icon01"></i>
+                                    </strong>
+                                    <ul>
+                                        <li><a href="https://www.ekapepia.com/v3/price/auction/realTime/realTimePrice.do?menuSn=71&boardInfoNo=" target="_blank">경락가격</a></li>
+                                        <li><a href="https://www.ekape.or.kr/kapecp/ui/kapecp/fastLogin.jsp?loginType=01" target="_blank">등급판정 신청</a></li>
+                                        <li><a href="https://www.ekape.or.kr/kapecp/ui/kapecp/fastLogin.jsp?loginType=02" target="_blank">등급판정 결과</a></li>
+                                        <li><a href="https://pub.mtrace.go.kr" target="_blank">축산물 이력신고</a></li>
+                                        <li><a href="https://www.ekape.or.kr/kapecp/ui/kapecp/gradeanalysis.do" target="_blank">출하정보 피드백</a></li>
+                                        <li><a href="/sms/subscribe/authentication.do?menuId=menu131176&amp;nextUrl=">가격정보 알림톡</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>
+                                        <span>유통정보</span>
+                                        <i class="quick-service-menu-icon icon02"></i>
+                                    </strong>
+                                    <ul>
+                                        <li><a href="https://www.ekapepia.com/v3/price/auction/realTime/realTimePrice.do?menuSn=71&boardInfoNo=" target="_blank">경락가격</a></li>
+                                        <li><a href="https://www.ekape.or.kr/kapecp/ui/kapecp/fastLogin.jsp?loginType=02" target="_blank">통합증명서 발급</a></li>
+                                        <li><a href="https://pub.mtrace.go.kr" target="_blank">축산물이력신고</a></li>
+                                        <li><a href="/board/list.do?menuId=menu152051&nextUrl=">관련법령 및 지침</a></li>
+                                        <li><a href="/board/list.do?menuId=menu17793&nextUrl=">등급판정 통계</a></li>
+                                        <li><a href="https://www.ekapepia.com/v3/board/list.do?menuSn=67&boardInfoNo=0156" target="_blank">발간물</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>
+                                        <span>급식정보</span>
+                                        <i class="quick-service-menu-icon icon03"></i>
+                                    </strong>
+                                    <ul>
+                                        <li><a href="https://www.ekape.or.kr/kapecp/oneservicemng/oneSrvcMng/combineSearchOne.do" target="_blank">통합정보 조회</a></li>
+                                        <!-- <li><a href="https://www.ekape.or.kr/kapecp/ui/kapecp/fastLogin.jsp?loginType=02" target="_blank">통합증명서 발급</a></li> -->
+                                        <li><a href="https://www.ekape.or.kr/kapecp/ui/kapecp/fastLogin.jsp?loginType=02" target="_blank">공공급식 검수</a></li>
+                                        <li><a href="https://pub.mtrace.go.kr" target="_blank">축산물이력신고</a></li>
+                                        <li><a href="https://www.ekape.or.kr/kapecp/trustservicemng/trustSrvcMng/trustSearchOne.do">내 아이 급식정보</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>
+                                        <span>소비정보</span>
+                                        <i class="quick-service-menu-icon icon04"></i>
+                                    </strong>
+                                    <ul>
+                                        <li><a href="https://www.ekapepia.com/v3/price/consumer/periodPrice.do?menuSn=40&boardInfoNo=" target="_blank">축산물 소비자 가격동향</a></li>
+                                        <li><a href="https://www.ekapepia.com/v3/hereMeat/livestockPriceMap.do?menuSn=13&boardInfoNo=" target="_blank">내 주변 축산물 가격</a></li>
+                                        <li><a href="https://mtrace.go.kr/index.jsp" target="_blank">축산물 이력조회</a></li>
+                                        <li><a href="https://www.ekape.or.kr/kapecp/trustservicemng/trustSrvcMng/trustSearchOne.do" target="_blank">내 아이 급식정보</a></li>
+                                        <li><a href="https://www.ekapepia.com/v3/supplyTrend/consumeTrend/consumerPanelData.do?menuSn=63&boardInfoNo=" target="_blank">축산물 소비패턴</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong>
+                                        <span>통합정보</span>
+                                        <i class="quick-service-menu-icon icon05"></i>
+                                    </strong>
+                                    <ul>
+                                        <li><a href="https://liis.go.kr/cmn/login/LoginInfoMain.do" target="_blank">농장통합정보 조회</a></li>
+                                        <li><a href="https://www.ekape.or.kr/kapecp/ui/kapecp/fastLogin.jsp?loginType=02" target="_blank">통합증명서 발급</a></li>
+                                        <li><a href="https://pub.mtrace.go.kr" target="_blank">축산물 이력관리</a></li>
+                                        <li><a href="https://www.ekapepia.com/v3/web/main.do?gateWay=y" target="_blank">축산물 수급동향</a></li>
+                                        <li><a href="https://www.mtrace.go.kr/stats" target="_blank">축산빅데이터</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- 
+				<a href="https://www.ekape.or.kr/kapecp" class="header-top-menu-link" target="_blank">
+				 -->
+                <a href="https://www.ekape.or.kr/kapecp" class="header-top-menu-link" target="_blank">
+                    <span>축산물원패스</span>
+                </a>
+                <a href="https://www.mtrace.go.kr/" class="header-top-menu-link" target="_blank">
+                    <span>축산물이력제</span>
+                </a>
+                <a href="https://www.ekapepia.com/v3/web/main.do?gateWay=y" class="header-top-menu-link" target="_blank">
+                    <span>축산유통정보 다봄</span>
+                </a>
+                <a href="https://www.mtrace.go.kr/stats/" class="header-top-menu-link" target="_blank">
+                    <span>축산유통 통계누리</span>
+                </a>
+                <a href="https://ekape.kacnet.co.kr" class="header-top-menu-link" target="_blank">
+                    <span>축산유통교육</span>
+                </a>
+                <a href="https://www.ekape.or.kr/ework" class="header-top-menu-link" target="_blank">
+                    <span>전자출하</span>
+                </a>
+                <a href="https://www.ekapepia.com/v3/price/auction/realTime/realTimePrice.do?menuSn=71&boardInfoNo=" target="_blank" class="header-top-menu-link" data-response="mobile">
+                    <span>실시간 경락가격</span>
+                </a>
+                <a href="https://www.ekapepia.com/v3/price/auction/period/auctionPrice/period.do?menuSn=99&boardInfoNo=" target="_blank" class="header-top-menu-link" data-response="mobile">
+                    <span>기간별 경락가격</span>
+                </a>
+            </div>
+            <div class="header-top-util">
+                <div class="header-top-util-zoom">
+                    <strong>글자 크기</strong>
+                    <button type="button" class="header-top-util-zoom-button" data-zoom="in" title="누리집 화면 크게 보기 (110%)">
+                        <i class="ri-add-line"></i>
+                    </button>
+                    <button type="button" class="header-top-util-zoom-button" data-zoom="out" title="누리집 화면 작게 보기 (90%)">
+                        <i class="ri-subtract-line"></i>
+                    </button>
+                </div>
+                <div class="header-top-util-lang">
+                    <a href="/english/index.do" target="_blank">
+                        <span>ENG</span>
+                        <i class="ri-arrow-right-s-line"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="header-container layout">
+            <h1 class="header-logo">
+                <a href="/">
+                    <span class="sr-only">축산물품질평가원</span>
+                </a>
+            </h1>
+            <nav id="gnb" class="header-navi" data-navi="gnb">
+                <div class="header-navi-sitemap-desc">
+                    <h2>누리집 안내지도</h2>
+                    <p>누리집의 전체 메뉴를 한눈에 볼 수 있습니다. 해당 메뉴를 클릭하시면 해당페이지로 이동합니다.</p>
+                </div>
+                <ul>
+                    <li class="depth01">
+                        <!-- 정보공개 -->
+                        <a href="/board/list.do?menuId=menu152051" class="depth01-link">
+                            <span>정보공개</span>
+                        </a>
+                        <div class="depth02-container">
+                            <ul class="depth02-list">
+                                <li class="depth02 active" id="menu194678">
+                                    <a class="depth02-link" href="#"><span>법령정보</span></a>
+                                    <div class="depth03-container">
+                                        <a href="#"><span>법령정보</span></a>
+                                        <ul class="depth03-list">
+                                            <li class="depth03 " id="hmenu152051">
+                                                <a class="depth03-link " href="/board/list.do?menuId=menu152051&boardInfoNo=0029" onclick="return fn_menu_go('/board/list.do','menu152051','0029');" rel="nosublink">
+                                                    <span>관련법령</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu118454">
+                                                <a class="depth03-link " href="/board/list.do?menuId=menu118454&boardInfoNo=0030" onclick="return fn_menu_go('/board/list.do','menu118454','0030');" rel="nosublink">
+                                                    <span>지침·요령</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu110817">
+                                                <a class="depth03-link " href="/board/list.do?menuId=menu110817&boardInfoNo=0019" onclick="return fn_menu_go('/board/list.do','menu110817','0019');" rel="nosublink">
+                                                    <span>사규 제·개정 예고</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="depth02 active" id="menu189602">
+                                    <a class="depth02-link" href="#"><span>통계정보</span></a>
+                                    <div class="depth03-container">
+                                        <a href="#"><span>통계정보</span></a>
+                                        <ul class="depth03-list">
+                                            <li class="depth03 " id="hmenu138629">
+                                                <a class="depth03-link " href="/board/list.do?menuId=menu138629&boardInfoNo=0032" onclick="return fn_menu_go('/board/list.do','menu138629','0032');" rel="nosublink">
+                                                    <span>통계연보</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu17793">
+                                                <a class="depth03-link " href="/board/list.do?menuId=menu17793&boardInfoNo=0031" onclick="return fn_menu_go('/board/list.do','menu17793','0031');" rel="nosublink">
+                                                    <span>통계월보</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="depth02 active" id="menu186796">
+                                    <a class="depth02-link" href="#"><span>정보공개제도</span></a>
+                                    <div class="depth03-container">
+                                        <a href="#"><span>정보공개제도</span></a>
+                                        <ul class="depth03-list">
+                                            <li class="depth03 " id="hmenu154740">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu154740" onclick="return fn_menu_go('/contents/list.do','menu154740','');" rel="nosublink">
+                                                    <span>제도안내</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu144949">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu144949" onclick="return fn_menu_go('/contents/list.do','menu144949','0055');" rel="nosublink">
+                                                    <span>정보공개청구</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu189651">
+                                                <a class="depth03-link " href="/informpublic/list.do?menuId=menu128072" onclick="return fn_menu_go('/informpublic/list.do','menu128072','_self');" rel="nosublink">
+                                                    <span>정보공개목록</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu139614">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu139614" onclick="return fn_menu_go('/contents/list.do','menu139614','');" rel="nosublink">
+                                                    <span>비공개 세부기준</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="depth02 active" id="menu126558">
+                                    <a class="depth02-link" href="#"><span>사업실명제도</span></a>
+                                    <div class="depth03-container">
+                                        <a href="#"><span>사업실명제도</span></a>
+                                        <ul class="depth03-list">
+                                            <li class="depth03 " id="hmenu168851">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu168851" onclick="return fn_menu_go('/contents/list.do','menu168851','');" rel="nosublink">
+                                                    <span>제도안내</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu167812">
+                                                <a class="depth03-link " href="/board/list.do?menuId=menu167812&boardInfoNo=0012" onclick="return fn_menu_go('/board/list.do','menu167812','0012');" rel="nosublink">
+                                                    <span>대상사업목록</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="depth02 active" id="menu165554">
+                                    <a class="depth02-link" href="#"><span>공공데이터개방</span></a>
+                                    <div class="depth03-container">
+                                        <a href="#"><span>공공데이터개방</span></a>
+                                        <ul class="depth03-list">
+                                            <li class="depth03 " id="hmenu159407">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu159407" onclick="return fn_menu_go('/contents/list.do','menu159407','0070');" rel="nosublink">
+                                                    <span>공공데이터 제공안내</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu166539">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu166539" onclick="return fn_menu_go('/contents/list.do','menu166539','');" rel="nosublink">
+                                                    <span>공공데이터목록</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="depth02 active" id="menu1924">
+                                    <a class="depth02-link" href="#"><span>개인정보보호</span></a>
+                                    <div class="depth03-container">
+                                        <a href="#"><span>개인정보보호</span></a>
+                                        <ul class="depth03-list">
+                                            <li class="depth03 " id="hmenu15656">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu171484" onclick="return fn_menu_go('/contents/list.do','menu171484','_self');" rel="nosublink">
+                                                    <span>개인정보 처리방침</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu144187">
+                                                <a class="depth03-link " href="/board/list.do?menuId=menu144187&boardInfoNo=0018" onclick="return fn_menu_go('/board/list.do','menu144187','0018');" rel="nosublink">
+                                                    <span>개인정보 목적 외 이용 및 제3자제공</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu153319">
+                                                <a class="depth03-link " href="/board/list.do?menuId=menu153319&boardInfoNo=0086" onclick="return fn_menu_go('/board/list.do','menu153319','0086');" rel="nosublink">
+                                                    <span>개인정보 영향평가 요약본</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu180751">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu180751" onclick="return fn_menu_go('/contents/list.do','menu180751','');" rel="nosublink">
+                                                    <span>이메일무단수집거부</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu131187">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu131187" onclick="return fn_menu_go('/contents/list.do','menu131187','');" rel="nosublink">
+                                                    <span>고정형 영상정보처리기기 운영·관리 방침</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu296857">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu296857" onclick="return fn_menu_go('/contents/list.do','menu296857','_self');" rel="nosublink">
+                                                    <span>정보주체 권리보장</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="depth01">
+                        <!-- 알림소식 -->
+                        <a href="/board/list.do?menuId=menu149208" class="depth01-link">
+                            <span>알림소식</span>
+                        </a>
+                        <div class="depth02-container">
+                            <ul class="depth02-list">
+                                <li class="depth02" id="hmenu149208">
+                                    <a class="depth02-link " href="/board/list.do?menuId=menu149208&boardInfoNo=0024" onclick="return fn_menu_go('/board/list.do','menu149208','0024');" rel="">
+                                        <span>공지사항</span>
+                                    </a>
+                                    <div class="depth03-container">
+                                        <a href="/board/list.do?menuId=menu149208&boardInfoNo=0024" onclick="return fn_menu_go('/board/list.do','menu149208','0024');" rel="">
+                                            <span>공지사항</span>
+                                        </a>
+                                    </div>
+                                </li>
+                                <li class="depth02" id="hmenu199737">
+                                    <a class="depth02-link " href="/board/list.do?menuId=menu199737&boardInfoNo=0077" onclick="return fn_menu_go('/board/list.do','menu199737','0077');" rel="nosublink">
+                                        <span>입찰공고</span>
+                                    </a>
+                                    <div class="depth03-container">
+                                        <a href="/board/list.do?menuId=menu199737&boardInfoNo=0077" onclick="return fn_menu_go('/board/list.do','menu199737','0077');" rel="nosublink">
+                                            <span>입찰공고</span>
+                                        </a>
+                                    </div>
+                                </li>
+                                <li class="depth02" id="hmenu160301">
+                                    <a class="depth02-link " href="/board/list.do?menuId=menu160301&boardInfoNo=0025" onclick="return fn_menu_go('/board/list.do','menu160301','0025');" rel="nosublink">
+                                        <span>보도자료</span>
+                                    </a>
+                                    <div class="depth03-container">
+                                        <a href="/board/list.do?menuId=menu160301&boardInfoNo=0025" onclick="return fn_menu_go('/board/list.do','menu160301','0025');" rel="nosublink">
+                                            <span>보도자료</span>
+                                        </a>
+                                    </div>
+                                </li>
+                                <li class="depth02 active" id="menu141567">
+                                    <a class="depth02-link" href="#"><span>채용정보</span></a>
+                                    <div class="depth03-container">
+                                        <a href="#"><span>채용정보</span></a>
+                                        <ul class="depth03-list">
+                                            <li class="depth03 " id="hmenu130838">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu130838" onclick="return fn_menu_go('/contents/list.do','menu130838','');" rel="">
+                                                    <span>채용안내</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu138147">
+                                                <a class="depth03-link " href="/board/list.do?menuId=menu138147&boardInfoNo=0028" onclick="return fn_menu_go('/board/list.do','menu138147','0028');" rel="nosublink">
+                                                    <span>채용공고</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu296859">
+                                                <a class="depth03-link " href="/jobPostingAlert/authentication.do?menuId=menu296859" onclick="return fn_menu_go('/jobPostingAlert/authentication.do','menu296859','_self');" rel="nosublink">
+                                                    <span>채용공고 알리미</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu116862">
+                                                <a class="depth03-link " href="/board/list.do?menuId=menu116862&boardInfoNo=0036" onclick="return fn_menu_go('/board/list.do','menu116862','0036');" rel="nosublink">
+                                                    <span>친인척 채용인원 현황</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="depth02 active" id="menu199738">
+                                    <a class="depth02-link" href="#"><span>주요행사</span></a>
+                                    <div class="depth03-container">
+                                        <a href="#"><span>주요행사</span></a>
+                                        <ul class="depth03-list">
+                                            <li class="depth03 " id="hmenu199739">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu199739" onclick="return fn_menu_go('/contents/list.do','menu199739','');" rel="nosublink">
+                                                    <span>축산유통포럼</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu162261">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu146232" onclick="return fn_menu_go('/contents/list.do','menu146232','_self');" rel="nosublink">
+                                                    <span>전국축산물품질평가대상</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu199740">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu199740" onclick="return fn_menu_go('/contents/list.do','menu199740','_self');" rel="nosublink">
+                                                    <span>스마트축산 AI 경진대회</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu172229">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu139815" onclick="return fn_menu_go('/contents/list.do','menu139815','_self');" rel="nosublink">
+                                                    <span>대학생 축산유통 경진대회</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="depth01">
+                        <!-- 열린경영 -->
+                        <a href="/contents/list.do?menuId=menu164847" class="depth01-link">
+                            <span>열린경영</span>
+                        </a>
+                        <div class="depth02-container">
+                            <ul class="depth02-list">
+                                <li class="depth02 active" id="menu199744">
+                                    <a class="depth02-link" href="#"><span>ESG경영</span></a>
+                                    <div class="depth03-container">
+                                        <a href="#"><span>ESG경영</span></a>
+                                        <ul class="depth03-list">
+                                            <li class="depth03 " id="hmenu164847">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu164847" onclick="return fn_menu_go('/contents/list.do','menu164847','');" rel="nosublink">
+                                                    <span>ESG경영 체계</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="depth02 active" id="menu199746">
+                                    <a class="depth02-link" href="#"><span>경영공시</span></a>
+                                    <div class="depth03-container">
+                                        <a href="#"><span>경영공시</span></a>
+                                        <ul class="depth03-list">
+                                            <li class="depth03 " id="hmenu187093">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu187093" onclick="return fn_menu_go('/contents/list.do','menu187093','');" rel="nosublink">
+                                                    <span>경영공시 안내</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu199747">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu199747" onclick="return fn_menu_go('/contents/list.do','menu199747','');" rel="nosublink">
+                                                    <span>경영공시 목록</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="depth02 active" id="menu116041">
+                                    <a class="depth02-link" href="#"><span>윤리경영</span></a>
+                                    <div class="depth03-container">
+                                        <a href="#"><span>윤리경영</span></a>
+                                        <ul class="depth03-list">
+                                            <li class="depth03 " id="hmenu199749">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu116102" onclick="return fn_menu_go('/contents/list.do','menu116102','_self');" rel="nosublink">
+                                                    <span>윤리경영 안내</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu164822">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu127231" onclick="return fn_menu_go('/contents/list.do','menu127231','0008');" rel="nosublink">
+                                                    <span>감사결과공개</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu154729">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu154729" onclick="return fn_menu_go('/contents/list.do','menu154729','');" rel="nosublink">
+                                                    <span>임원직무청렴계약</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="depth02" id="hmenu131570">
+                                    <a class="depth02-link " href="/contents/list.do?menuId=menu131570" onclick="return fn_menu_go('/contents/list.do','menu131570','');" rel="nosublink">
+                                        <span>인권경영</span>
+                                    </a>
+                                    <div class="depth03-container">
+                                        <a href="/contents/list.do?menuId=menu131570" onclick="return fn_menu_go('/contents/list.do','menu131570','');" rel="nosublink">
+                                            <span>인권경영</span>
+                                        </a>
+                                    </div>
+                                </li>
+                                <li class="depth02 active" id="menu191948">
+                                    <a class="depth02-link" href="#"><span>안전경영</span></a>
+                                    <div class="depth03-container">
+                                        <a href="#"><span>안전경영</span></a>
+                                        <ul class="depth03-list">
+                                            <li class="depth03 " id="hmenu171610">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu171610" onclick="return fn_menu_go('/contents/list.do','menu171610','');" rel="nosublink">
+                                                    <span>작업중지요청제</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu123539">
+                                                <a class="depth03-link " href="/communication/authentication.do?menuId=menu123539" onclick="return fn_menu_go('/communication/authentication.do','menu123539','0071');" rel="nosublink">
+                                                    <span>안전소통창구</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="depth02" id="hmenu11930">
+                                    <a class="depth02-link " href="/contents/list.do?menuId=menu11930" onclick="return fn_menu_go('/contents/list.do','menu11930','');" rel="nosublink">
+                                        <span>사회공헌</span>
+                                    </a>
+                                    <div class="depth03-container">
+                                        <a href="/contents/list.do?menuId=menu11930" onclick="return fn_menu_go('/contents/list.do','menu11930','');" rel="nosublink">
+                                            <span>사회공헌</span>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="depth01">
+                        <!-- 주요사업 -->
+                        <a href="/contents/list.do?menuId=menu162346" class="depth01-link">
+                            <span>주요사업</span>
+                        </a>
+                        <div class="depth02-container">
+                            <ul class="depth02-list">
+                                <li class="depth02 active" id="menu110778">
+                                    <a class="depth02-link" href="#"><span>축산물품질평가사업</span></a>
+                                    <div class="depth03-container">
+                                        <a href="#"><span>축산물품질평가사업</span></a>
+                                        <ul class="depth03-list">
+                                            <li class="depth03 " id="hmenu199750">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu162346" onclick="return fn_menu_go('/contents/list.do','menu162346','_self');" rel="nosublink">
+                                                    <span>축산물등급제</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu121912">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu121912" onclick="return fn_menu_go('/contents/list.do','menu121912','');" rel="nosublink">
+                                                    <span>저탄소 축산물 인증</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu188715">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu188715" onclick="return fn_menu_go('/contents/list.do','menu188715','');" rel="nosublink">
+                                                    <span>연구·ICT개발</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="depth02 active" id="menu117355">
+                                    <a class="depth02-link" href="#"><span>축산물이력사업</span></a>
+                                    <div class="depth03-container">
+                                        <a href="#"><span>축산물이력사업</span></a>
+                                        <ul class="depth03-list">
+                                            <li class="depth03 " id="hmenu199751">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu113487" onclick="return fn_menu_go('/contents/list.do','menu113487','_self');" rel="nosublink">
+                                                    <span>축산물 이력제</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu145108">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu145108" onclick="return fn_menu_go('/contents/list.do','menu145108','');" rel="nosublink">
+                                                    <span>유전자분석</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="depth02 active" id="menu164259">
+                                    <a class="depth02-link" href="#"><span>축산유통사업</span></a>
+                                    <div class="depth03-container">
+                                        <a href="#"><span>축산유통사업</span></a>
+                                        <ul class="depth03-list">
+                                            <li class="depth03 " id="hmenu120270">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu120270" onclick="return fn_menu_go('/contents/list.do','menu120270','');" rel="nosublink">
+                                                    <span>유통정보조사</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu176342">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu176342" onclick="return fn_menu_go('/contents/list.do','menu176342','');" rel="nosublink">
+                                                    <span>소비동향분석</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu199752">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu199752" onclick="return fn_menu_go('/contents/list.do','menu199752','');" rel="nosublink">
+                                                    <span>축산물수급정보제공</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu199753">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu199753" onclick="return fn_menu_go('/contents/list.do','menu199753','');" rel="nosublink">
+                                                    <span>축산유통통합정보관리</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu122182">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu122182" onclick="return fn_menu_go('/contents/list.do','menu122182','');" rel="nosublink">
+                                                    <span>축산 마이데이터 서비스</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu15840">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu124929" onclick="return fn_menu_go('/contents/list.do','menu124929','_self');" rel="nosublink">
+                                                    <span>스마트축산 지원</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu120021">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu120021" onclick="return fn_menu_go('/contents/list.do','menu120021','');" rel="nosublink">
+                                                    <span>온라인경매시스템</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu197114">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu197114" onclick="return fn_menu_go('/contents/list.do','menu197114','');" rel="nosublink">
+                                                    <span>전자출하시스템</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu199754">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu142269" onclick="return fn_menu_go('/contents/list.do','menu142269','_self');" rel="nosublink">
+                                                    <span>축산물 수출입 지원사업</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu143138">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu143138" onclick="return fn_menu_go('/contents/list.do','menu143138','');" rel="nosublink">
+                                                    <span>축산유통교육</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu17658">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu17658" onclick="return fn_menu_go('/contents/list.do','menu17658','');" rel="nosublink">
+                                                    <span>계열화사업자 평가</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu189288">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu189288" onclick="return fn_menu_go('/contents/list.do','menu189288','');" rel="nosublink">
+                                                    <span>곤충유통활성화</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="depth01">
+                        <!-- 국민소통 -->
+                        <a href="/communication/authentication.do?menuId=menu157727" class="depth01-link">
+                            <span>국민소통</span>
+                        </a>
+                        <div class="depth02-container">
+                            <ul class="depth02-list">
+                                <li class="depth02" id="hmenu157727">
+                                    <a class="depth02-link " href="/communication/authentication.do?menuId=menu157727" onclick="return fn_menu_go('/communication/authentication.do','menu157727','0014');" rel="nosublink">
+                                        <span>국민의 소리</span>
+                                    </a>
+                                    <div class="depth03-container">
+                                        <a href="/communication/authentication.do?menuId=menu157727" onclick="return fn_menu_go('/communication/authentication.do','menu157727','0014');" rel="nosublink">
+                                            <span>국민의 소리</span>
+                                        </a>
+                                    </div>
+                                </li>
+                                <li class="depth02 active" id="menu125459">
+                                    <a class="depth02-link" href="#"><span>민원창구</span></a>
+                                    <div class="depth03-container">
+                                        <a href="#"><span>민원창구</span></a>
+                                        <ul class="depth03-list">
+                                            <li class="depth03 " id="hmenu173646">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu173646" onclick="return fn_menu_go('/contents/list.do','menu173646','');" rel="nosublink">
+                                                    <span>고객서비스헌장</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu198774">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu198774" onclick="return fn_menu_go('/contents/list.do','menu198774','');" rel="nosublink">
+                                                    <span>민원사무안내</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu199755">
+                                                <a class="depth03-link " href="/communication/authentication.do?menuId=menu199755" onclick="return fn_menu_go('/communication/authentication.do','menu199755','0017');" rel="nosublink">
+                                                    <span>민원신청</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="depth02" id="hmenu11459">
+                                    <a class="depth02-link " href="/contents/list.do?menuId=menu11459" onclick="return fn_menu_go('/contents/list.do','menu11459','');" rel="nosublink">
+                                        <span>이의신청제도</span>
+                                    </a>
+                                    <div class="depth03-container">
+                                        <a href="/contents/list.do?menuId=menu11459" onclick="return fn_menu_go('/contents/list.do','menu11459','');" rel="nosublink">
+                                            <span>이의신청제도</span>
+                                        </a>
+                                    </div>
+                                </li>
+                                <li class="depth02" id="hmenu191202">
+                                    <a class="depth02-link " href="/contents/list.do?menuId=menu191202" onclick="return fn_menu_go('/contents/list.do','menu191202','0075');" rel="nosublink">
+                                        <span>기업성장응답센터</span>
+                                    </a>
+                                    <div class="depth03-container">
+                                        <a href="/contents/list.do?menuId=menu191202" onclick="return fn_menu_go('/contents/list.do','menu191202','0075');" rel="nosublink">
+                                            <span>기업성장응답센터</span>
+                                        </a>
+                                    </div>
+                                </li>
+                                <li class="depth02 active" id="menu111284">
+                                    <a class="depth02-link" href="#"><span>청렴신고센터</span></a>
+                                    <div class="depth03-container">
+                                        <a href="#"><span>청렴신고센터</span></a>
+                                        <ul class="depth03-list">
+                                            <li class="depth03 " id="hmenu154505">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu154505" onclick="return fn_menu_go('/contents/list.do','menu154505','0054');" rel="nosublink">
+                                                    <span>청렴신문고</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu16056">
+                                                <a class="depth03-link " href="/contents/list.do?menuId=menu16056" onclick="return fn_menu_go('/contents/list.do','menu16056','');" rel="nosublink">
+                                                    <span>공익신고</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="depth02" id="hmenu296860">
+                                    <a class="depth02-link " href="/communication/authentication.do?menuId=menu296860" onclick="return fn_menu_go('/communication/authentication.do','menu296860','0089');" rel="nosublink">
+                                        <span>KAPE 칭찬실</span>
+                                    </a>
+                                    <div class="depth03-container">
+                                        <a href="/communication/authentication.do?menuId=menu296860" onclick="return fn_menu_go('/communication/authentication.do','menu296860','0089');" rel="nosublink">
+                                            <span>KAPE 칭찬실</span>
+                                        </a>
+                                    </div>
+                                </li>
+                                <li class="depth02" id="hmenu143524">
+                                    <a class="depth02-link " href="/board/faq/list.do?menuId=menu143524&boardInfoNo=0015" onclick="return fn_menu_go('/board/faq/list.do','menu143524','0015');" rel="nosublink">
+                                        <span>자주찾는질문</span>
+                                    </a>
+                                    <div class="depth03-container">
+                                        <a href="/board/faq/list.do?menuId=menu143524&boardInfoNo=0015" onclick="return fn_menu_go('/board/faq/list.do','menu143524','0015');" rel="nosublink">
+                                            <span>자주찾는질문</span>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="depth01">
+                        <!-- 기관소개 -->
+                        <a href="/contents/list.do?menuId=menu195473" class="depth01-link">
+                            <span>기관소개</span>
+                        </a>
+                        <div class="depth02-container">
+                            <ul class="depth02-list">
+                                <li class="depth02" id="hmenu195473">
+                                    <a class="depth02-link " href="/contents/list.do?menuId=menu195473" onclick="return fn_menu_go('/contents/list.do','menu195473','');" rel="nosublink">
+                                        <span>경영목표</span>
+                                    </a>
+                                    <div class="depth03-container">
+                                        <a href="/contents/list.do?menuId=menu195473" onclick="return fn_menu_go('/contents/list.do','menu195473','');" rel="nosublink">
+                                            <span>경영목표</span>
+                                        </a>
+                                    </div>
+                                </li>
+                                <li class="depth02" id="hmenu173349">
+                                    <a class="depth02-link " href="/contents/list.do?menuId=menu173349" onclick="return fn_menu_go('/contents/list.do','menu173349','');" rel="nosublink">
+                                        <span>주요연혁</span>
+                                    </a>
+                                    <div class="depth03-container">
+                                        <a href="/contents/list.do?menuId=menu173349" onclick="return fn_menu_go('/contents/list.do','menu173349','');" rel="nosublink">
+                                            <span>주요연혁</span>
+                                        </a>
+                                    </div>
+                                </li>
+                                <li class="depth02" id="hmenu11862">
+                                    <a class="depth02-link " href="/contents/list.do?menuId=menu11862" onclick="return fn_menu_go('/contents/list.do','menu11862','');" rel="nosublink">
+                                        <span>CI소개</span>
+                                    </a>
+                                    <div class="depth03-container">
+                                        <a href="/contents/list.do?menuId=menu11862" onclick="return fn_menu_go('/contents/list.do','menu11862','');" rel="nosublink">
+                                            <span>CI소개</span>
+                                        </a>
+                                    </div>
+                                </li>
+                                <li class="depth02 active" id="menu134671">
+                                    <a class="depth02-link" href="#"><span>조직도</span></a>
+                                    <div class="depth03-container">
+                                        <a href="#"><span>조직도</span></a>
+                                        <ul class="depth03-list">
+                                            <li class="depth03 " id="hmenu175128">
+                                                <a class="depth03-link " href="/introduce/groupList.do?menuId=menu175128" onclick="return fn_menu_go('/introduce/groupList.do','menu175128','_self');" rel="nosublink">
+                                                    <span>조직도</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu110359">
+                                                <a class="depth03-link " href="/gradeInfo/getAreaCorpList.do?menuId=menu110359" onclick="return fn_menu_go('/gradeInfo/getAreaCorpList.do','menu110359','_self');" rel="nosublink">
+                                                    <span>지역별 작업장</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="depth02" id="hmenu199756">
+                                    <a class="depth02-link " href="/contents/list.do?menuId=menu199756" onclick="return fn_menu_go('/contents/list.do','menu199756','_self');" rel="nosublink">
+                                        <span>찾아오시는 길</span>
+                                    </a>
+                                    <div class="depth03-container">
+                                        <a href="/contents/list.do?menuId=menu199756" onclick="return fn_menu_go('/contents/list.do','menu199756','_self');" rel="nosublink">
+                                            <span>찾아오시는 길</span>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="depth01">
+                        <!-- 누리홍보 -->
+                        <a href="/kapeNuri/index.do?menuId=menu199758" class="depth01-link">
+                            <span>누리홍보</span>
+                        </a>
+                        <div class="depth02-container">
+                            <ul class="depth02-list">
+                                <li class="depth02" id="hmenu199758">
+                                    <a class="depth02-link " href="/kapeNuri/index.do?menuId=menu199758" onclick="return fn_menu_go('/kapeNuri/index.do','menu199758','');" rel="nosublink">
+                                        <span>누리홍보관</span>
+                                    </a>
+                                    <div class="depth03-container">
+                                        <a href="/kapeNuri/index.do?menuId=menu199758" onclick="return fn_menu_go('/kapeNuri/index.do','menu199758','');" rel="nosublink">
+                                            <span>누리홍보관</span>
+                                        </a>
+                                    </div>
+                                </li>
+                                <li class="depth02 active" id="menu199760">
+                                    <a class="depth02-link" href="#"><span>홍보자료</span></a>
+                                    <div class="depth03-container">
+                                        <a href="#"><span>홍보자료</span></a>
+                                        <ul class="depth03-list">
+                                            <li class="depth03 " id="hmenu199761">
+                                                <a class="depth03-link active" href="/board/list.do?menuId=menu199761&boardInfoNo=0083" onclick="return fn_menu_go('/board/list.do','menu199761','0083');" rel="nosublink">
+                                                    <span>영상</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu199762">
+                                                <a class="depth03-link " href="/board/list.do?menuId=menu199762&boardInfoNo=0084" onclick="return fn_menu_go('/board/list.do','menu199762','0084');" rel="nosublink">
+                                                    <span>인쇄물</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="depth02" id="hmenu134822">
+                                    <a class="depth02-link " href="/board/list.do?menuId=menu134822&boardInfoNo=0085" onclick="return fn_menu_go('/board/list.do','menu134822','0085');" rel="nosublink">
+                                        <span>행사사진</span>
+                                    </a>
+                                    <div class="depth03-container">
+                                        <a href="/board/list.do?menuId=menu134822&boardInfoNo=0085" onclick="return fn_menu_go('/board/list.do','menu134822','0085');" rel="nosublink">
+                                            <span>행사사진</span>
+                                        </a>
+                                    </div>
+                                </li>
+                                <li class="depth02" id="hmenu199759">
+                                    <a class="depth02-link " href="/contents/list.do?menuId=menu199759" onclick="return fn_menu_go('/contents/list.do','menu199759','');" rel="nosublink">
+                                        <span>누리미디어</span>
+                                    </a>
+                                    <div class="depth03-container">
+                                        <a href="/contents/list.do?menuId=menu199759" onclick="return fn_menu_go('/contents/list.do','menu199759','');" rel="nosublink">
+                                            <span>누리미디어</span>
+                                        </a>
+                                    </div>
+                                </li>
+                                <li class="depth02 active" id="menu120260">
+                                    <a class="depth02-link" href="#"><span>소식지</span></a>
+                                    <div class="depth03-container">
+                                        <a href="#"><span>소식지</span></a>
+                                        <ul class="depth03-list">
+                                            <li class="depth03 " id="hmenu140656">
+                                                <a class="depth03-link " href="/board/ebook/list.do?menuId=menu140656&boardInfoNo=0027" onclick="return fn_menu_go('/board/ebook/list.do','menu140656','0027');" rel="nosublink">
+                                                    <span>KAPE in (2020-현재)</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu185098">
+                                                <a class="depth03-link " href="/board/ebook/list.do?menuId=menu185098&boardInfoNo=0027" onclick="return fn_menu_go('/board/ebook/list.do','menu185098','0027');" rel="nosublink">
+                                                    <span>KAPE누리 (2017-2019)</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu140460">
+                                                <a class="depth03-link " href="/board/ebook/list.do?menuId=menu140460&boardInfoNo=0027" onclick="return fn_menu_go('/board/ebook/list.do','menu140460','0027');" rel="nosublink">
+                                                    <span>등급정보 365+ (2007-2016)</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu197315">
+                                                <a class="depth03-link " href="/board/ebook/list.do?menuId=menu197315&boardInfoNo=0027" onclick="return fn_menu_go('/board/ebook/list.do','menu197315','0027');" rel="nosublink">
+                                                    <span>축산물등급정보 (2004-2006)</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="depth02 active" id="menu195193">
+                                    <a class="depth02-link" href="#"><span>구독서비스</span></a>
+                                    <div class="depth03-container">
+                                        <a href="#"><span>구독서비스</span></a>
+                                        <ul class="depth03-list">
+                                            <li class="depth03 " id="hmenu131176">
+                                                <a class="depth03-link " href="/sms/subscribe/authentication.do?menuId=menu131176" onclick="return fn_menu_go('/sms/subscribe/authentication.do','menu131176','_self');" rel="nosublink">
+                                                    <span>가격정보 알림톡</span>
+                                                </a>
+                                            </li>
+                                            <li class="depth03 " id="hmenu296861">
+                                                <a class="depth03-link " href="/benefitAlert/authentication.do?menuId=menu296861" onclick="return fn_menu_go('/benefitAlert/authentication.do','menu296861','_self');" rel="nosublink">
+                                                    <span>축산 혜택알리미</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+            <ul class="header-util">
+                <li class="header-util-item" data-util-item="search">
+                    <a href="#header-util-search">
+                        <i class="ri-search-line"></i>
+                        <span class="sr-only">통합검색 열기</span>
+                    </a>
+                    <div id="header-util-search" class="header-util-search layout">
+                        <form id="searchIntegForm" name="searchIntegForm" class="header-util-search-container" method="post" action="">
+                            <input type="hidden" name="maincheck" id="maincheck" value="" />
+                            <input type="hidden" name="pageIndexMain" id="pageIndexMain" value="" />
+                            <input type="hidden" name="searchConditionMain" id="searchConditionMain" value="" />
+                            <input type="hidden" name="largeMenuIdMain" id="largeMenuIdMain" />
+                            <input type="hidden" name="searchTypeMain" id="searchTypeMain" />
+                            <legend>통합검색</legend>
+                            <fieldset>
+                                <!-- 메인통합검색 -->
+                                <input type="text" id="searchKeywordMain" name="searchKeywordMain" autofocus class="header-util-search-input" placeholder="검색어를 입력하세요." title="검색어를 입력하세요.">
+                                <button onclick="goMainSearchList();" class="header-util-search-submit">
+                                    <i class="ri-search-line"></i>
+                                    <span class="sr-only">검색</span>
+                                </button>
+                            </fieldset>
+                        </form>
+                        <button type="button" class="header-util-search-close">
+                            <span>닫기</span>
+                            <i class="ri-close-large-line"></i>
+                        </button>
+                    </div>
+                </li>
+                <li class="header-util-item" data-util-item="menu">
+                    <!-- 모바일 메뉴 버튼 -->
+                    <a href="#gnb">
+                        <i class="ri-close-large-line"></i>
+                        <span class="sr-only">전체메뉴 열기</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </header>
+    <aside id="aside" class="aside">
+        <div class="aside-quick">
+            <a class="aside-quick-toggle" href="#aside-quick-list">
+                <i class="ri-login-circle-line"></i>
+                <span>빠른메뉴</span>
+            </a>
+            <dl id="aside-quick-list" class="aside-quick-list">
+                <dt>
+                    <a href="https://www.ekape.or.kr/kapecp" target="_blank">축산물원패스</a>
+                </dt>
+                <dd data-type="01">
+                    <a href="https://www.ekape.or.kr/kapecp/ui/kapecp/fastLogin.jsp?loginType=01" target="_blank">
+                        <i class="aside-quick-icon icon01-01"></i>
+                        <span>등급판정 신청</span>
+                    </a>
+                    <a href="https://www.ekape.or.kr/kapecp/ui/kapecp/fastLogin.jsp?loginType=02" target="_blank">
+                        <i class="aside-quick-icon icon01-02"></i>
+                        <span>등급판정 결과</span>
+                    </a>
+                    <a href="https://www.ekape.or.kr/kapecp/ui/kapecp/fastLogin.jsp?loginType=02" target="_blank">
+                        <i class="aside-quick-icon icon01-03"></i>
+                        <span>통합증명서 발행</span>
+                    </a>
+                    <a href="https://www.ekape.or.kr/kapecp/ui/kapecp/fastLogin.jsp?loginType=02" target="_blank">
+                        <i class="aside-quick-icon icon01-04"></i>
+                        <span>공공급식 검수</span>
+                    </a>
+                </dd>
+                <dt>
+                    <a href="https://www.mtrace.go.kr/" target="_blank">축산물이력제</a>
+                </dt>
+                <dd data-type="02">
+                    <a href="https://mtrace.go.kr/biz/bizFlowChartList.do?mid=KO01030000" target="_blank">
+                        <i class="aside-quick-icon icon02-01"></i>
+                        <span>축종별 이력관리</span>
+                    </a>
+                    <a href="https://mtrace.go.kr/" target="_blank">
+                        <i class="aside-quick-icon icon02-02"></i>
+                        <span>이력 조회</span>
+                    </a>
+                </dd>
+                <dt>
+                    <a href="https://www.ekapepia.com" target="_blank">축산유통정보</a>
+                </dt>
+                <dd data-type="03">
+                    <a href="https://www.ekapepia.com/v3/price/auction/realTime/realTimePrice.do?menuSn=71&boardInfoNo=" target="_blank">
+                        <i class="aside-quick-icon icon03-01"></i>
+                        <span>실시간 경락가격</span>
+                    </a>
+                    <a href="https://www.ekapepia.com/v3/price/auction/period/auctionPrice/period.do?menuSn=99&boardInfoNo=" target="_blank">
+                        <i class="aside-quick-icon icon03-02"></i>
+                        <span>기간별 경락가격</span>
+                    </a>
+                </dd>
+                <dt class="sr-only">기타</dt>
+                <dd class="basic-button-group" data-dir="vertical" data-type="04">
+                    <a href="#quick-service" class="basic-button01">
+                        <i class="ri-star-line"></i>
+                        <span>서비스 모아보기</span>
+                    </a>
+                    <a href="/contents/list.do?menuId=menu171484&amp;nextUrl=" class="basic-button02">
+                        <i class="ri-user-line"></i>
+                        <span>개인정보처리방침</span>
+                    </a>
+                </dd>
+            </dl>
+        </div>
+    </aside>
+    <main id="container" class="layout">
+        <nav id="lnb" class="lnb">
+            <h2 class="lnb-title">누리홍보</h2>
+            <div class="lnb-navi">
+                <ul>
+                    <li class="depth02" id="lmenu199758">
+                        <a class="depth02-link " href="/kapeNuri/index.do" onclick="return fn_menu_go('/kapeNuri/index.do','menu199758','');">
+                            <span>누리홍보관</span>
+                        </a>
+                    </li>
+                    <li class="depth02" id="lmenu199760">
+                        <a class="depth02-link active" href="javascript:;">
+                            <span>홍보자료</span>
+                        </a>
+                        <div class="depth03-container">
+                            <ul class="depth03-list">
+                                <li class="depth03" id="lmenu199761">
+                                    <a class="depth03-link active"
+                                        href="/board/list.do" onclick="return fn_menu_go('/board/list.do','menu199761','0083');">
+                                        <span>영상</span>
+                                    </a>
+                                </li>
+                                <li class="depth03" id="lmenu199762">
+                                    <a class="depth03-link "
+                                        href="/board/list.do" onclick="return fn_menu_go('/board/list.do','menu199762','0084');">
+                                        <span>인쇄물</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="depth02" id="lmenu134822">
+                        <a class="depth02-link " href="/board/list.do" onclick="return fn_menu_go('/board/list.do','menu134822','0085');">
+                            <span>행사사진</span>
+                        </a>
+                    </li>
+                    <li class="depth02" id="lmenu199759">
+                        <a class="depth02-link " href="/contents/list.do" onclick="return fn_menu_go('/contents/list.do','menu199759','');">
+                            <span>누리미디어</span>
+                        </a>
+                    </li>
+                    <li class="depth02" id="lmenu120260">
+                        <a class="depth02-link " href="javascript:;">
+                            <span>소식지</span>
+                        </a>
+                        <div class="depth03-container">
+                            <ul class="depth03-list">
+                                <li class="depth03" id="lmenu140656">
+                                    <a class="depth03-link "
+                                        href="/board/ebook/list.do" onclick="return fn_menu_go('/board/ebook/list.do','menu140656','0027');">
+                                        <span>KAPE in (2020-현재)</span>
+                                    </a>
+                                </li>
+                                <li class="depth03" id="lmenu185098">
+                                    <a class="depth03-link "
+                                        href="/board/ebook/list.do" onclick="return fn_menu_go('/board/ebook/list.do','menu185098','0027');">
+                                        <span>KAPE누리 (2017-2019)</span>
+                                    </a>
+                                </li>
+                                <li class="depth03" id="lmenu140460">
+                                    <a class="depth03-link "
+                                        href="/board/ebook/list.do" onclick="return fn_menu_go('/board/ebook/list.do','menu140460','0027');">
+                                        <span>등급정보 365+ (2007-2016)</span>
+                                    </a>
+                                </li>
+                                <li class="depth03" id="lmenu197315">
+                                    <a class="depth03-link "
+                                        href="/board/ebook/list.do" onclick="return fn_menu_go('/board/ebook/list.do','menu197315','0027');">
+                                        <span>축산물등급정보 (2004-2006)</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="depth02" id="lmenu195193">
+                        <a class="depth02-link " href="javascript:;">
+                            <span>구독서비스</span>
+                        </a>
+                        <div class="depth03-container">
+                            <ul class="depth03-list">
+                                <li class="depth03" id="lmenu131176"><a class="depth03-link 
+															"
+                                        href="javascript:;" onclick="return fn_menu_go('/sms/subscribe/authentication.do','menu131176','_self');">
+                                        <span>가격정보 알림톡</span>
+                                    </a>
+                                </li>
+                                <li class="depth03" id="lmenu296861"><a class="depth03-link 
+															"
+                                        href="javascript:;" onclick="return fn_menu_go('/benefitAlert/authentication.do','menu296861','_self');">
+                                        <span>축산 혜택알리미</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <section id="content-wrap" class="content">
+            <div class="content-info">
+                <h3>국정과제</h3>
+                <!-- 메뉴네비게이션 -->
+                <ul class="content-path">
+                    <li>
+                        <a href="/index.do" title="메인 페이지로 이동">
+                            <i class="ri-home-5-fill"></i>
+                            <span class="sr-only">HOME</span>
+                        </a>
+                    </li>
+                    <li>
+                        <div class="menu" id="menuBtn1">
+                            <a href="#" onclick="return fn_shortcut_show1('menu199757');" title="1depth 메뉴 펼치기">
+                                누리홍보
+                            </a>
+                            <div class="shortcut" id="shortcutMenu1"></div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="menu" id="menuBtn2">
+                            <a href="#" onclick="return fn_shortcut_show2('menu199760');" title="2depth 메뉴 펼치기">
+                                홍보자료
+                            </a>
+                            <div class="shortcut" id="shortcutMenu2"></div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="menu" id="menuBtn3">
+                            <a href="#" onclick="return fn_shortcut_show3('menu199761');" title="3depth 메뉴 펼치기">
+                                국정과제
+                            </a>
+                            <div class="shortcut" id="shortcutMenu3"></div>
+                        </div>
+                    </li>
+                </ul>
+                <div class="content-util">
+                    <button type="button">
+                        <i class="ri-printer-line"></i>
+                        <span class="sr-only">이 페이지 인쇄하기</span>
+                    </button>
+                    <button type="button">
+                        <i class="ri-links-line"></i>
+                        <span class="sr-only">이 페이지 URL 복사하기</span>
+                    </button>
+                </div>
+            </div>
+            <!--4뎁스 메뉴  -->
+            <div class="content-tab" data-tab-type="menu">
+                <ul class="content-tab-container">
+                </ul>
+            </div>
+            <article class="content-desc">
+                <script type="text/javascript" src="/js/ekape/hr/hr_board_gallery.js"></script>
+                <script type="text/javascript">
+                    function goBoardGallery2View(no) {
+                        document.searchForm.dmlType.value = "SELECT";
+                        document.searchForm.boardNo.value = no;
+                        document.searchForm.action = "/board/view.do";
+                        document.searchForm.submit();
+                    }
+                </script>
+                <style>
+                    .image-list-ul {
+                        list-style-type: none;
+                        padding: 0;
+                        margin: 0;
+                        text-align: center;
+                        display: flex;
+                        flex-wrap: wrap;
+                    }
+                    .image-list-li {
+                        display: inline-block;
+                        width: 49%;
+                        margin-bottom: 5px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: flex-start;
+                    }
+                </style>
+                <!-- 기본 FORM -->
+                <form name="defaultSearchForm" id="defaultSearchForm" method="get" onsubmit="return false;">
+                    <input type="hidden" name="menuId" value="menu199761" />
+                    <input type="hidden" name="dmlType" value="SELECT" />
+                    <input type="hidden" name="pageIndex" value="1" />
+                </form>
+                <!--  게시판 form  -->
+                <form id="searchForm" name="searchForm" method="post" action="">
+                    <input type="hidden" name="menuId" id="menuId" value="menu199761" />
+                    <input type="hidden" name="boardNo" id="boardNo" value="" />
+                    <input type="hidden" name="dmlType" id="dmlType" value="SELECT" />
+                    <input type="hidden" name="searchReqNum" id="searchReqNum" value="" />
+                    <input type="hidden" name="pageIndex" id="pageIndex" value="1" />
+                    <input type="hidden" name="pageUnit" id="pageUnit" value="9" />
+                    <input type="hidden" name="searchPublicYn" id="searchPublicYn" value="Y" />
+                    <div class="board">
+                        <div class="board-list-top">
+                            <ul class="board-list-info">
+                                <li>전체 <b>74</b>건</li>
+                                <li>현재페이지 <b>1/9</b></li>
+                            </ul>
+                            <div class="board-list-search">
+                                <div class="input-box" data-input-size="small">
+                                    <select name="searchCondition" title="검색어 분류를 선택하세요.">
+                                        <option value="SUBJECT">제목</option>
+                                        <option value="CONTENTS">내용</option>
+                                    </select>
+                                </div>
+                                <div class="input-box" data-input-size="large">
+                                    <input type="text" name="searchKeyword" onkeypress="if(event.keyCode == 13){goSearchBoardList(1); return;}" value="" placeholder="검색어를 입력하세요." title="검색어를 입력하세요." />
+                                </div>
+                                <button type="button" onclick="goSearchBoardList('1');" class="basic-button04">
+                                    <span>검색</span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- 게시판 목록 -->
+                        <div class="board-list" data-board-type="gall-card">
+                            <ul>
+                                <li>
+                                    <a href="https://youtu.be/Fogynkl8mTE?si=WL3Zf-7ktPzqCDF6" target="_blank" rel="noopener noreferrer" class="gall-card gall-card--featured">
+                                        <span data-column="thumb" class="gall-card-thumb">
+                                            <span class="gall-card-badge">
+                                                <span class="gall-card-badge-icon" aria-hidden="true"><i class="ri-star-fill"></i></span>
+                                                <span class="gall-card-badge-label">대표성과</span>
+                                            </span>
+                                            <img src="https://img.youtube.com/vi/Fogynkl8mTE/maxresdefault.jpg" alt="대한민국 정부혁신박람회 현장스케치 국민과 만난 축산물품질평가원" />
+                                        </span>
+                                        <div class="gall-card-body">
+                                            <div class="gall-card-lead">
+                                                <div data-column="info" class="gall-card-meta-row">                                                    
+                                                    <span class="gall-card-meta-tag">축평원-01-123</span>
+                                                    <span class="gall-card-meta-tag">축평원-01-123</span>
+                                                    <span class="gall-card-meta-tag">축평원-01-123</span>
+                                                    <span class="gall-card-meta-tag">축평원-01-123</span>
+                                                    <span class="gall-card-meta-tag">축평원-01-123</span>
+                                                </div>
+                                                <strong data-column="subject">대한민국 정부혁신박람회 현장스케치 국민과 만난 축산물품질평가원</strong>
+                                            </div>
+                                            <ul class="gall-card-keyword-list" aria-label="키워드">
+                                                <li><span class="gall-card-keyword">정부혁신</span></li>
+                                                <li><span class="gall-card-keyword">축산물품질평가</span></li>
+                                                <li><span class="gall-card-keyword">현장스케치</span></li>
+                                                <li><span class="gall-card-keyword">박람회</span></li>
+                                                <li><span class="gall-card-keyword">국정과제</span></li>
+                                                <li><span class="gall-card-keyword">국정과제</span></li>
+                                                <li><span class="gall-card-keyword">국정과제</span></li>
+                                            </ul>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://youtu.be/DNqMLo62UHo?si=hFJyh_suY8iFAIJ5" target="_blank" rel="noopener noreferrer" class="gall-card">
+                                        <span data-column="thumb" class="gall-card-thumb">
+                                            <img src="https://img.youtube.com/vi/DNqMLo62UHo/maxresdefault.jpg" alt="스마트축산 청년 서포터즈 성과보고회 스마트축산의 미래를 함께 묻다 2025년 11월 20일, 전북 정읍 ‘피그월드’에서 열린" />
+                                        </span>
+                                        <div class="gall-card-body">
+                                            <div class="gall-card-lead">
+                                                <div data-column="info" class="gall-card-meta-row">
+                                                    <span class="gall-card-meta-tag">축평원-01-123</span>
+                                                </div>
+                                                <strong data-column="subject">스마트축산 청년 서포터즈 성과보고회 스마트축산의 미래를 함께 묻다 2025년 11월 20일, 전북 정읍 ‘피그월드’에서 열린</strong>
+                                            </div>
+                                            <ul class="gall-card-keyword-list" aria-label="키워드">
+                                                <li><span class="gall-card-keyword">스마트축산</span></li>
+                                                <li><span class="gall-card-keyword">청년서포터즈</span></li>
+                                                <li><span class="gall-card-keyword">성과보고</span></li>
+                                                <li><span class="gall-card-keyword">피그월드</span></li>
+                                            </ul>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://youtu.be/ygYp5y4fj28?si=foTiIe2cLgolllem" target="_blank" rel="noopener noreferrer" class="gall-card">
+                                        <span data-column="thumb" class="gall-card-thumb">
+                                            <img src="https://img.youtube.com/vi/ygYp5y4fj28/maxresdefault.jpg" alt="대한민국 농업박람회 농업의 미래, 축산의 혁신을 만나다! 현장스케치" />
+                                        </span>
+                                        <div class="gall-card-body">
+                                            <div class="gall-card-lead">
+                                                <div data-column="info" class="gall-card-meta-row">
+                                                    <span class="gall-card-meta-tag">축평원-01-123</span>
+                                                </div>
+                                                <strong data-column="subject">대한민국 농업박람회 농업의 미래, 축산의 혁신을 만나다! 현장스케치</strong>
+                                            </div>
+                                            <ul class="gall-card-keyword-list" aria-label="키워드">
+                                                <li><span class="gall-card-keyword">농업박람회</span></li>
+                                                <li><span class="gall-card-keyword">축산혁신</span></li>
+                                                <li><span class="gall-card-keyword">현장스케치</span></li>
+                                                <li><span class="gall-card-keyword">미래농업</span></li>
+                                            </ul>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://youtu.be/NXW0n-VqHyQ?si=weAr9cNJYwM8uqTI" target="_blank" rel="noopener noreferrer" class="gall-card">
+                                        <span data-column="thumb" class="gall-card-thumb">
+                                            <img src="https://img.youtube.com/vi/NXW0n-VqHyQ/maxresdefault.jpg" alt="곤충의 무한한 가치! 2025 제7회 곤충의 날 행사 스케치" />
+                                        </span>
+                                        <div class="gall-card-body">
+                                            <div class="gall-card-lead">
+                                                <div data-column="info" class="gall-card-meta-row">
+                                                    <span class="gall-card-meta-tag">축평원-01-123</span>
+                                                </div>
+                                                <strong data-column="subject">곤충의 무한한 가치! 2025 제7회 곤충의 날 행사 스케치</strong>
+                                            </div>
+                                            <ul class="gall-card-keyword-list" aria-label="키워드">
+                                                <li><span class="gall-card-keyword">곤충</span></li>
+                                                <li><span class="gall-card-keyword">곤충의날</span></li>
+                                                <li><span class="gall-card-keyword">행사스케치</span></li>
+                                                <li><span class="gall-card-keyword">생태계</span></li>
+                                            </ul>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://youtu.be/UWlnwmOs-7c?si=X02zDceD9PhsDodA" target="_blank" rel="noopener noreferrer" class="gall-card">
+                                        <span data-column="thumb" class="gall-card-thumb">
+                                            <img src="https://img.youtube.com/vi/UWlnwmOs-7c/maxresdefault.jpg" alt="2025 한국국제축산박람회 현장 스케치" />
+                                        </span>
+                                        <div class="gall-card-body">
+                                            <div class="gall-card-lead">
+                                                <div data-column="info" class="gall-card-meta-row">
+                                                    <span class="gall-card-meta-tag">축평원-01-123</span>
+                                                </div>
+                                                <strong data-column="subject">2025 한국국제축산박람회 현장 스케치</strong>
+                                            </div>
+                                            <ul class="gall-card-keyword-list" aria-label="키워드">
+                                                <li><span class="gall-card-keyword">KIEE</span></li>
+                                                <li><span class="gall-card-keyword">축산박람회</span></li>
+                                                <li><span class="gall-card-keyword">현장스케치</span></li>
+                                                <li><span class="gall-card-keyword">국제행사</span></li>
+                                            </ul>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://youtu.be/bJ1vO3_Usq0?si=iTlAWjaINRHPqdRN" target="_blank" rel="noopener noreferrer" class="gall-card">
+                                        <span data-column="thumb" class="gall-card-thumb">
+                                            <img src="https://img.youtube.com/vi/bJ1vO3_Usq0/maxresdefault.jpg" alt="여름철 스마트 축사 장비 관리의 모든것" />
+                                        </span>
+                                        <div class="gall-card-body">
+                                            <div class="gall-card-lead">
+                                                <div data-column="info" class="gall-card-meta-row">
+                                                    <span class="gall-card-meta-tag">축평원-01-123</span>
+                                                </div>
+                                                <strong data-column="subject">여름철 스마트 축사 장비 관리의 모든것</strong>
+                                            </div>
+                                            <ul class="gall-card-keyword-list" aria-label="키워드">
+                                                <li><span class="gall-card-keyword">스마트축사</span></li>
+                                                <li><span class="gall-card-keyword">장비관리</span></li>
+                                                <li><span class="gall-card-keyword">여름철</span></li>
+                                                <li><span class="gall-card-keyword">축사관리</span></li>
+                                            </ul>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://youtu.be/pZ4uB3j1d3s?si=SSjTCf2sx87Vo2aK" target="_blank" rel="noopener noreferrer" class="gall-card">
+                                        <span data-column="thumb" class="gall-card-thumb">
+                                            <img src="https://img.youtube.com/vi/pZ4uB3j1d3s/maxresdefault.jpg" alt="스마트축산, AI 혁신으로 한 걸음 더!" />
+                                        </span>
+                                        <div class="gall-card-body">
+                                            <div class="gall-card-lead">
+                                                <div data-column="info" class="gall-card-meta-row">
+                                                    <span class="gall-card-meta-tag">축평원-01-123</span>
+                                                </div>
+                                                <strong data-column="subject">스마트축산, AI 혁신으로 한 걸음 더!</strong>
+                                            </div>
+                                            <ul class="gall-card-keyword-list" aria-label="키워드">
+                                                <li><span class="gall-card-keyword">스마트축산</span></li>
+                                                <li><span class="gall-card-keyword">AI</span></li>
+                                                <li><span class="gall-card-keyword">축산혁신</span></li>
+                                                <li><span class="gall-card-keyword">데이터</span></li>
+                                            </ul>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://youtu.be/MWjTHVso5Xo?si=a2g1eHzBNa0Goz3d" target="_blank" rel="noopener noreferrer" class="gall-card">
+                                        <span data-column="thumb" class="gall-card-thumb">
+                                            <img src="https://img.youtube.com/vi/MWjTHVso5Xo/mqdefault.jpg" alt="폭염작업에 대한 사업주의 보건조치 「의무 신설 및 위반 시 처벌」" />
+                                        </span>
+                                        <div class="gall-card-body">
+                                            <div class="gall-card-lead">
+                                                <div data-column="info" class="gall-card-meta-row">
+                                                    <span class="gall-card-meta-tag">축평원-01-123</span>
+                                                </div>
+                                                <strong data-column="subject">폭염작업에 대한 사업주의 보건조치 「의무 신설 및 위반 시 처벌」</strong>
+                                            </div>
+                                            <ul class="gall-card-keyword-list" aria-label="키워드">
+                                                <li><span class="gall-card-keyword">폭염작업</span></li>
+                                                <li><span class="gall-card-keyword">보건조치</span></li>
+                                                <li><span class="gall-card-keyword">산업안전</span></li>
+                                                <li><span class="gall-card-keyword">사업주의무</span></li>
+                                            </ul>
+                                        </div>
+                                    </a>
+                                </li>                                
+                                <li>
+                                    <a href="#" class="gall-card">
+                                        <span data-column="thumb" class="gall-card-thumb gall-card-thumb--empty" role="img" aria-label="등록된 대표 이미지가 없습니다.">
+                                            <span class="gall-card-thumb-placeholder" aria-hidden="true">
+                                                <img src="/images/user_2024/sub/board/noimage.png" width="59" height="62" alt="" />
+                                            </span>
+                                        </span>
+                                        <div class="gall-card-body">
+                                            <div class="gall-card-lead">
+                                                <div data-column="info" class="gall-card-meta-row">
+                                                    <span class="gall-card-meta-tag">축평원-01-000</span>
+                                                </div>
+                                                <strong data-column="subject">대표 이미지가 없을 때 표시 영역(Figma 536:2029) 예시입니다.</strong>
+                                            </div>
+                                            <ul class="gall-card-keyword-list" aria-label="키워드">
+                                                <li><span class="gall-card-keyword">썸네일</span></li>
+                                                <li><span class="gall-card-keyword">플레이스홀더</span></li>
+                                                <li><span class="gall-card-keyword">목업</span></li>
+                                            </ul>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="board-pagination">
+                            <a href="#" onclick="fn_egov_link_page(1); return false;" class="active"><span>1</span><span class="sr-only">현재 페이지</span></a><a href="#" onclick="fn_egov_link_page(2); return false;">2</a><a href="#" onclick="fn_egov_link_page(3); return false;">3</a><a href="#" onclick="fn_egov_link_page(4); return false;">4</a><a href="#" onclick="fn_egov_link_page(5); return false;">5</a><a href="#" onclick="fn_egov_link_page(6); return false;">6</a><a href="#" onclick="fn_egov_link_page(7); return false;">7</a><a href="#" onclick="fn_egov_link_page(8); return false;">8</a><a href="#" onclick="fn_egov_link_page(9); return false;">9</a>
+                        </div>
+                    </div>
+                </form>
+            </article>
+        </section>
+    </main>
+    <script type="text/javascript">
+    </script>
+    <div class="page-anchor">
+        <a href="#" class="page-anchor-up">
+            <i class="ri-arrow-up-s-line"></i>
+            <span>맨 위로</span>
+        </a>
+    </div>
+    <footer id="footer" class="footer">
+        <div class="footer-top">
+            <div class="layout">
+                <ul class="footer-top-menu">
+                    <li><a href="/contents/list.do" onclick="return fn_menu_go('/contents/list.do','menu171484','');">개인정보처리방침</a></li>
+                    <li><a href="/contents/list.do" onclick="return fn_menu_go('/contents/list.do','menu180751');">이메일무단수집거부</a></li>
+                    <li><a href="/contents/list.do" onclick="return fn_menu_go('/contents/list.do','menu131187','');">고정형 영상정보처리기기 운영&middot;관리 방침</a></li>
+                </ul>
+                <div class="footer-top-site">
+                    <a href="#footer-top-site-list" class="footer-top-site-toggle">
+                        <span>관련사이트 바로가기</span>
+                        <i class="ri-arrow-down-s-line"></i>
+                    </a>
+                    <ul id="footer-top-site-list" class="footer-top-site-list">
+                        <li><a href="http://www.mafra.go.kr/" target="_blank" title="새창열림">농림축산식품부</a></li>
+                        <li><a href="https://www.mtrace.go.kr/" target="_blank" title="새창열림">축산물이력제</a></li>
+                        <li><a href="https://www.ekape.or.kr/kapecp/" target="_blank" title="새창열림">축산물원패스</a></li>
+                        <li><a href="http://www.ekapepia.com/" target="_blank" title="새창열림">축산유통정보 다봄</a></li>
+                        <li><a href="https://smart.ekape.or.kr/smart/pf/main.do" target="_blank" title="새창열림">스마트축산 빅데이터플랫폼</a></li>
+                        <li><a href="https://www.mtrace.go.kr/stats" target="_blank" title="새창열림">축산유통 통계누리</a></li>
+                        <li><a href="https://ekape.kacnet.co.kr/site2/main" target="_blank" title="새창열림">축산유통교육</a></li>
+                        <li><a href="https://k-beef.or.kr/web/kor/main" target="_blank" title="새창열림">한우수출홍보포털</a></li>
+                        <li><a href="https://ekape.or.kr/honey" target="_blank" title="새창열림">꿀 등급판정 시스템</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-mid">
+            <div class="layout">
+                <div class="footer-mid-info">
+                    <strong class="footer-mid-info-logo">
+                        <img src="/images/user_2024/layout/footer/logo.png" alt="축산물품질평가원">
+                    </strong>
+                    <address class="footer-mid-info-addr">
+                        <ul>
+                            <li>
+                                <b><span>주</span><span>소</span></b>
+                                <p>(30100) 세종특별자치시 아름서길 21 (아름동)</p>
+                            </li>
+                            <li>
+                                <b>전화번호</b>
+                                <p>044-410-7000</p>
+                            </li>
+                        </ul>
+                    </address>
+                    <p class="footer-mid-info-copyright">ⓒ 2024. 축산물품질평가원. All rights reserved.</p>
+                </div>
+                <div class="footer-mid-util">
+                    <ul class="footer-mid-util-mark">
+                        <li data-mark="open">
+                            <img src="/images/user_2024/layout/footer/mark-open.png" alt="OPEN 공공누리 공공저작물 자유이용허락">
+                        </li>
+                        <li data-mark="wa">
+                            <a href="https://www.webwatch.or.kr/Situation/WA_Situation.html?MenuCD=110&npp=9&skey=1&sval=축산물품질평가원" target="_blank">
+                                <img src="/images/user_2024/layout/footer/mark-wa.png" alt="과학정보기술통신부 WA WEB 접근성 : 웹와치(WebWatch) 2025.05.22 ~ 2026.05.21">
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="footer-mid-util-sns">
+                        <li>
+                            <a href="https://www.youtube.com/@eKAPE" target="_blank">
+                                <i class="footer-mid-util-sns-icon icon-youtube"></i>
+                                <span class="sr-only">유튜브</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.instagram.com/chukpyeong_official" target="_blank">
+                                <i class="footer-mid-util-sns-icon icon-instagram"></i>
+                                <span class="sr-only">인스타그램</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.facebook.com/ekapepia" target="_blank">
+                                <i class="footer-mid-util-sns-icon icon-facebook"></i>
+                                <span class="sr-only">페이스북</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://blog.naver.com/ekapepia" target="_blank">
+                                <i class="footer-mid-util-sns-icon icon-blog"></i>
+                                <span class="sr-only">블로그</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="http://pf.kakao.com/_Ncxlxixb" target="_blank">
+                                <i class="footer-mid-util-sns-icon icon-kakao"></i>
+                                <span class="sr-only">카카오톡</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="layout">
+                <ul class="footer-bottom-remote">
+                    <li>
+                        <a href="http://113366.com/ekape" target="_blank" title="새창열림">
+                            <span>원격지원 1</span>
+                            <i class="ri-arrow-right-s-line"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://113366.com/mtrace" target="_blank" title="새창열림">
+                            <span>원격지원 2</span>
+                            <i class="ri-arrow-right-s-line"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</body>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70082720-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "UA-70082720-1");
+</script>
+</html>
