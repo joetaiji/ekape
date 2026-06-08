@@ -6,10 +6,12 @@ const fullpageContainer = () => {
 	if ($type === "main") {
 		const FULLPAGE_ANCHORS = ["visual", "community", "media", "business", "mfooter"];
 		const FULLPAGE_SCROLLING_SPEED = 1000;
+		const FULLPAGE_RESPONSIVE_MQ = window.matchMedia("(max-width: 1280px), (max-height: 900px)");
 
 		const $fullpageSections = () => $("#container").children(".section");
 
 		const isFullpageResponsive = () =>
+			FULLPAGE_RESPONSIVE_MQ.matches ||
 			$("html").hasClass("fp-responsive") ||
 			$("body").hasClass("fp-responsive") ||
 			$("#container").hasClass("fp-responsive");
@@ -113,12 +115,27 @@ const fullpageContainer = () => {
 			}
 		};
 
-		const bindFullpageFocusSync = () => {
+		const unbindFullpageFocusSync = () => {
 			document.removeEventListener("focusin", handleFullpageFocusSync, true);
-			document.addEventListener("focusin", handleFullpageFocusSync, true);
-
 			window.removeEventListener("scroll", handleFullpageScrollGuard);
+		};
+
+		const bindFullpageFocusSync = () => {
+			unbindFullpageFocusSync();
+
+			if (!isFullpageActive()) return;
+
+			document.addEventListener("focusin", handleFullpageFocusSync, true);
 			window.addEventListener("scroll", handleFullpageScrollGuard, { passive: true });
+		};
+
+		const syncFullpageFocusSyncMode = () => {
+			if (isFullpageActive()) {
+				bindFullpageFocusSync();
+				return;
+			}
+
+			unbindFullpageFocusSync();
 		};
 
 		$("#container").fullpage({
@@ -134,13 +151,23 @@ const fullpageContainer = () => {
 			slidesNavigation: true,
 			keyboardScrolling: true,
 			normalScrollElements: ".section-press-list ul",
+			onResponsive: syncFullpageFocusSyncMode,
+			afterResponsive: syncFullpageFocusSyncMode,
 			afterLoad: function () {
-				resetPageScroll();
-				enableFullpageScrolling();
+				if (!isFullpageResponsive()) {
+					resetPageScroll();
+					enableFullpageScrolling();
+				}
 			},
 		});
 
-		bindFullpageFocusSync();
+		syncFullpageFocusSyncMode();
+
+		if (typeof FULLPAGE_RESPONSIVE_MQ.addEventListener === "function") {
+			FULLPAGE_RESPONSIVE_MQ.addEventListener("change", syncFullpageFocusSyncMode);
+		} else if (typeof FULLPAGE_RESPONSIVE_MQ.addListener === "function") {
+			FULLPAGE_RESPONSIVE_MQ.addListener(syncFullpageFocusSyncMode);
+		}
 
 
 		for(let i = 0; i <= $('#fp-nav li').length; ++i) {
